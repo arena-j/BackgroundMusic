@@ -138,17 +138,9 @@ static CGFloat const kVolumeIconAdditionalVerticalPadding = 0.075;
     }
 
     // Set the icons' sizes.
-    NSRect statusBarItemFrame;
-
-    if ([BGMStatusBarItem buttonAvailable]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpartial-availability"
-        statusBarItemFrame = statusBarItem.button.frame;
-#pragma clang diagnostic pop
-    } else {
-        // OS X 10.9 fallback. I haven't tested this (or anything else on 10.9).
-        statusBarItemFrame = statusBarItem.view.frame;
-    }
+    // The deployment target is macOS 11.0+, so NSStatusItem always has a button. (The old
+    // NSStatusItem.view property is deprecated.)
+    NSRect statusBarItemFrame = statusBarItem.button.frame;
 
     CGFloat heightMinusPadding = statusBarItemFrame.size.height * (1 - kStatusBarIconPadding);
 
@@ -183,14 +175,9 @@ static CGFloat const kVolumeIconAdditionalVerticalPadding = 0.075;
 }
 
 - (void) setImage:(NSImage*)image {
-    if ([BGMStatusBarItem buttonAvailable]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpartial-availability"
-        statusBarItem.button.image = image;
-#pragma clang diagnostic pop
-    } else {
-        statusBarItem.image = image;
-    }
+    // The deployment target is macOS 11.0+, so NSStatusItem always has a button. (The old
+    // NSStatusItem.image property is deprecated.)
+    statusBarItem.button.image = image;
 }
 
 - (BGMStatusBarIcon) icon {
@@ -285,7 +272,7 @@ static CGFloat const kVolumeIconAdditionalVerticalPadding = 0.075;
     });
 
     DebugMsg("BGMStatusBarItem::updateVolumeStatusBarIcon: Set icon to %s",
-             statusBarItem.image.name.UTF8String);
+             statusBarItem.button.image.name.UTF8String);
 }
 
 #pragma mark Debug Logging Menu Item
