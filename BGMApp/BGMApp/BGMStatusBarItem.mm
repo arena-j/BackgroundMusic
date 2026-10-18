@@ -138,17 +138,9 @@ static CGFloat const kVolumeIconAdditionalVerticalPadding = 0.075;
     }
 
     // Set the icons' sizes.
-    NSRect statusBarItemFrame;
-
-    if ([BGMStatusBarItem buttonAvailable]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpartial-availability"
-        statusBarItemFrame = statusBarItem.button.frame;
-#pragma clang diagnostic pop
-    } else {
-        // OS X 10.9 fallback. I haven't tested this (or anything else on 10.9).
-        statusBarItemFrame = statusBarItem.view.frame;
-    }
+    // The deployment target is macOS 11.0+, so NSStatusItem always has a button. (The old
+    // NSStatusItem.view property is deprecated.)
+    NSRect statusBarItemFrame = statusBarItem.button.frame;
 
     CGFloat heightMinusPadding = statusBarItemFrame.size.height * (1 - kStatusBarIconPadding);
 
