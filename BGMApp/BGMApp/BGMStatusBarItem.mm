@@ -183,14 +183,9 @@ static CGFloat const kVolumeIconAdditionalVerticalPadding = 0.075;
 }
 
 - (void) setImage:(NSImage*)image {
-    if ([BGMStatusBarItem buttonAvailable]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wpartial-availability"
-        statusBarItem.button.image = image;
-#pragma clang diagnostic pop
-    } else {
-        statusBarItem.image = image;
-    }
+    // The deployment target is macOS 11.0+, so NSStatusItem always has a button. (The old
+    // NSStatusItem.image property is deprecated.)
+    statusBarItem.button.image = image;
 }
 
 - (BGMStatusBarIcon) icon {
@@ -285,7 +280,7 @@ static CGFloat const kVolumeIconAdditionalVerticalPadding = 0.075;
     });
 
     DebugMsg("BGMStatusBarItem::updateVolumeStatusBarIcon: Set icon to %s",
-             statusBarItem.image.name.UTF8String);
+             statusBarItem.button.image.name.UTF8String);
 }
 
 #pragma mark Debug Logging Menu Item
